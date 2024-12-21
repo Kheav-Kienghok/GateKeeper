@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, flash, redirect, session, request
+from flask import Flask, render_template, url_for, redirect, session, request
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -57,8 +57,14 @@ def home_page():
 
     return render_template('index.html', message=message)
 
+# Helper function to check login status
+def is_logged_in():
+    return 'user_id' in session
+
 @app.route("/home")
 def login_page():
+    if not is_logged_in():  # Check if the user is logged in
+        return redirect(url_for('home_page'))
     return render_template('logout.html')
 
 # Logout route
